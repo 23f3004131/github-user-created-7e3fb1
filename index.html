@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GitHub User Info</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .container { max-width: 600px; margin: 50px auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>GitHub Account Creation Date</h1>
+    <form id="github-form">
+      <div class="form-group">
+        <label for="username">GitHub username:</label>
+        <input type="text" class="form-control" id="username" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <p id="result"></p>
+  </div>
+  <!-- jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <!-- Custom JS -->
+  <script>
+    document.getElementById('github-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var username = document.getElementById('username').value;
+      fetch('https://api.github.com/users/' + username)
+        .then(response => response.json())
+        .then(data => {
+          var date = new Date(data.created_at);
+          document.getElementById('result').innerText = 'Account creation date: ' + date.toISOString().split('T')[0] + ' UTC';
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('result').innerText = 'An error occurred. Please try again.';
+        });
+    });
+  </script>
+</body>
+</html>
